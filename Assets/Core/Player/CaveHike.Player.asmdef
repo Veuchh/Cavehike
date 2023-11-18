@@ -1,0 +1,16 @@
+{
+    "name": "CaveHike.Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:250c281765e9d1348a9375352a7e0032"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
