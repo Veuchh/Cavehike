@@ -13,11 +13,13 @@ namespace CaveHike.Player
         [SerializeField] float grappleMaxDistance;
 
         PlayerEntity _player;
+        PlayerMovement _playerMovement;
         ConfigurableJoint _joint;
 
         private void Awake()
         {
             _player = GetComponent<PlayerEntity>();
+            _playerMovement = GetComponent<PlayerMovement>();
             _player.PlayerData.Rigidbody = GetComponent<Rigidbody>();
             _player.PlayerData.Collider = GetComponent<CapsuleCollider>();
             _joint = _targetRigidbody.GetComponent<ConfigurableJoint>();
@@ -84,6 +86,13 @@ namespace CaveHike.Player
 
         private void EnableBehaviour(bool enabled)
         {
+
+            if (!enabled)
+            {
+                _playerMovement.SetVelocity(_player.PlayerData.Rigidbody.velocity);
+            }
+
+
             _player.PlayerData.Collider.enabled = enabled;
             _player.PlayerData.Controller.enabled = !enabled;
             _player.PlayerData.Rigidbody.useGravity = enabled;

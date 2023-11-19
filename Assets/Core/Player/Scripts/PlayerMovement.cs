@@ -31,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_playerEntity.PlayerData.IsGrappling)
+            return;
+        
         if (_playerEntity.PlayerData.Controller.isGrounded && _velocity.y < 0)
         {
             _remainingJumps = _maxJumpAmount;
@@ -45,7 +48,8 @@ public class PlayerMovement : MonoBehaviour
         //(big velocity and
         //velocity and input both are towards the same direction)
         //or if no inputs, we simply slightly decrease velocity
-        if (Mathf.Abs(_velocity.x) > _minMomentumSpeed &&
+        if (!_playerEntity.PlayerData.Controller.isGrounded && 
+            Mathf.Abs(_velocity.x) > _minMomentumSpeed &&
         (_velocity.x * _playerEntity.PlayerData.CurrentInput.x > 0 || _playerEntity.PlayerData.CurrentInput.x == 0))
         {
             if (_velocity.x > 0)
@@ -54,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
                 _velocity.x += _slowDownMomentumValue * Time.deltaTime;
         }
 
-        else if (Mathf.Abs(_playerEntity.PlayerData.CurrentInput.x) < .1f)
+        else if (!_playerEntity.PlayerData.Controller.isGrounded && Mathf.Abs(_playerEntity.PlayerData.CurrentInput.x) < .1f)
         {
             if (_velocity.x > 0)
                 _velocity.x -= _slowDownMomentumValue * Time.deltaTime;
@@ -99,6 +103,11 @@ public class PlayerMovement : MonoBehaviour
         {
             _startJumpDownRoutine = StartCoroutine(StartFastFall());
         }
+    }
+
+    public void SetVelocity(Vector3 newVelocity)
+    {
+        _velocity = newVelocity;
     }
 
     IEnumerator StartFastFall()
