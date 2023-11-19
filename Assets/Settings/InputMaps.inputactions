@@ -15,9 +15,27 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "AimGrapple",
+                    "type": "Value",
+                    "id": "0bf90ee6-5c33-46e6-bd3a-2b21505a4843",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Jump",
                     "type": "PassThrough",
                     "id": "ae2b40e4-d196-47eb-9a94-55b53c4409cd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Grapple",
+                    "type": "PassThrough",
+                    "id": "8b51b70b-984d-49ba-9474-b3df0b943ea7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -176,6 +194,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba8daee8-cf0a-4258-b013-d299df43c956",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AimGrapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "209a9624-f67b-44a1-a18c-b060b24eb034",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AimGrapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fe672ee-4557-414e-b141-8491b28b04d8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "87118119-fadd-4b5c-87a3-470f8ff8a138",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
