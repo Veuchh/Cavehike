@@ -8,16 +8,21 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] float _movementSpeed = 30;
+    [SerializeField] float _movementSpeed = 10;
     [SerializeField] float _gravity = -9;
-    [SerializeField] float _letItRip = 35;
-    [SerializeField] float _slowDownValue = .35f;
+    [SerializeField] float _minMomentumSpeed = 10;
+    [SerializeField] float _slowDownMomentumValue = .35f;
     [Header("Jump")]
     [SerializeField] float _jumpStrength;
-    [SerializeField] float releaseJumpButtonFallSpeed = 10;
+    [SerializeField] float _releaseJumpButtonFallSpeed = 10;
+    [SerializeField] int _maxJumpAmount = 2;
+    [SerializeField] float _fastFallStartupDelay = .1f;
 
+    int _remainingJumps;
+    bool _isJumpButtonPressed = false;
+    Coroutine _startJumpDownRoutine;
     PlayerEntity _playerEntity;
-    Vector3 velocity;
+    Vector3 _velocity;
 
     private void Awake()
     {
@@ -26,42 +31,49 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        velocity.y += _gravity * Time.deltaTime;
+        if (_playerEntity.PlayerData.Controller.isGrounded && _velocity.y < 0)
+        {
+            _remainingJumps = _maxJumpAmount;
+            _velocity.y = _releaseJumpButtonFallSpeed;
+        }
+        else
+        {
+            _velocity.y += _gravity * Time.deltaTime;
+        }
 
         //if
         //(big velocity and
         //velocity and input both are towards the same direction)
         //or if no inputs, we simply slightly decrease velocity
-        if (Mathf.Abs(velocity.x) > _letItRip &&
-            (velocity.x * _playerEntity.PlayerData.CurrentInput.x > 0 || _playerEntity.PlayerData.CurrentInput.x == 0))
+        if (Mathf.Abs(_velocity.x) > _minMomentumSpeed &&
+        (_velocity.x * _playerEntity.PlayerData.CurrentInput.x > 0 || _playerEntity.PlayerData.CurrentInput.x == 0))
         {
-            if (velocity.x > 0)
-                velocity.x -= _slowDownValue * Time.deltaTime;
+            if (_velocity.x > 0)
+                _velocity.x -= _slowDownMomentumValue * Time.deltaTime;
             else
-                velocity.x += _slowDownValue * Time.deltaTime;
+                _velocity.x += _slowDownMomentumValue * Time.deltaTime;
         }
 
         else if (Mathf.Abs(_playerEntity.PlayerData.CurrentInput.x) < .1f)
         {
-            if (velocity.x > 0)
-                velocity.x -= _slowDownValue * Time.deltaTime;
+            if (_velocity.x > 0)
+                _velocity.x -= _slowDownMomentumValue * Time.deltaTime;
             else
-                velocity.x += _slowDownValue * Time.deltaTime;
+                _velocity.x += _slowDownMomentumValue * Time.deltaTime;
 
-            if (velocity.x < _slowDownValue)
+            if (_velocity.x < _slowDownMomentumValue)
             {
-                velocity.x = 0;
+                _velocity.x = 0;
             }
         }
-        
 
         //else, we do normal movement
         else
         {
-            velocity.x = _playerEntity.PlayerData.CurrentInput.x * _movementSpeed;
+            _velocity.x = _playerEntity.PlayerData.CurrentInput.x * _movementSpeed;
         }
 
-        _playerEntity.PlayerData.Controller.Move(velocity * Time.deltaTime);
+        _playerEntity.PlayerData.Controller.Move(_velocity * Time.deltaTime);
     }
 
     public void OnMoveInput(Vector2 newValue)
@@ -71,27 +83,28 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJumpInput(bool isJumpPressed)
     {
-        if (isJumpPressed)
-            velocity.y = _jumpStrength;
-        else if (velocity.y > releaseJumpButtonFallSpeed)
-            velocity.y = releaseJumpButtonFallSpeed;
+        _isJumpButtonPressed = isJumpPressed;
+
+        if (isJumpPressed && _remainingJumps > 0)
+        {
+            if (_startJumpDownRoutine != null)
+            {
+                StopCoroutine(_startJumpDownRoutine);
+                _startJumpDownRoutine = null;
+            }
+            _velocity.y = _jumpStrength;
+            _remainingJumps--;
+        }
+        else if (!isJumpPressed && _velocity.y > _releaseJumpButtonFallSpeed)
+        {
+            _startJumpDownRoutine = StartCoroutine(StartFastFall());
+        }
     }
 
-    [Button]
-    public void TargetFramerate10()
+    IEnumerator StartFastFall()
     {
-        Application.targetFrameRate = 10;
-    }
+        yield return new WaitForSeconds(_fastFallStartupDelay);
 
-    [Button]
-    public void TargetFramerate60()
-    {
-        Application.targetFrameRate = 60;
-    }
-
-    [Button]
-    public void TargetFramerate120()
-    {
-        Application.targetFrameRate = 120;
+        _velocity.y = _releaseJumpButtonFallSpeed;
     }
 }

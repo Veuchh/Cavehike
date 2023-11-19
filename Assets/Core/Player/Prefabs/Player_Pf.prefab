@@ -185,10 +185,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 10
   _gravity: -70
-  _letItRip: 10
-  _slowDownValue: 60
+  _minMomentumSpeed: 10
+  _slowDownMomentumValue: 60
   _jumpStrength: 30
-  releaseJumpButtonFallSpeed: -10
+  _releaseJumpButtonFallSpeed: -10
+  _maxJumpAmount: 2
+  _fastFallStartupDelay: 0.05
 --- !u!114 &3781536991326407398
 MonoBehaviour:
   m_ObjectHideFlags: 0
