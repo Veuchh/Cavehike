@@ -7,6 +7,7 @@ namespace CaveHike.Player
 {
     public class CameraHandler : MonoBehaviour
     {
+        [SerializeField] CinemachineBrain _cinemachineBrain;
         [SerializeField] CinemachineVirtualCamera _vcam;
         [SerializeField] float _horizontalCamCatchupSpeed = 10f;
         [SerializeField] float _camSeeFartherMultiplier = 1f;
@@ -15,6 +16,19 @@ namespace CaveHike.Player
         private void Awake()
         {
             _playerEntity = GetComponent<PlayerEntity>();
+            _cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
+
+            GrappleHandler.OnGrapple += OnGrapple;
+        }
+
+        private void OnDestroy()
+        {
+            GrappleHandler.OnGrapple -= OnGrapple;
+        }
+
+        void OnGrapple()
+        {
+            _cinemachineBrain.m_UpdateMethod = _playerEntity.PlayerData.IsGrappling ? CinemachineBrain.UpdateMethod.FixedUpdate : CinemachineBrain.UpdateMethod.LateUpdate;
         }
 
         private void Update()

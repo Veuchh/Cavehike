@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace CaveHike.Player
         [SerializeField] float _grappleMaxDistance;
         [SerializeField] float _sphereCastRadius = 1f;
         [SerializeField] float _swingStrength = 1f;
+
+        public static event Action OnGrapple;
 
         PlayerEntity _player;
         PlayerMovement _playerMovement;
@@ -34,8 +37,8 @@ namespace CaveHike.Player
 
         void Update()
         {
-
             Debug.DrawRay(transform.position, _player.PlayerData.CurrentGrappleAimInput * _grappleMaxDistance, Color.red);
+         
             if (_player.PlayerData.IsGrappling)
             {
                 _lr.SetPosition(0, transform.position);
@@ -99,6 +102,8 @@ namespace CaveHike.Player
                 }
                 _player.PlayerData.IsGrappling = false;
             }
+
+            OnGrapple?.Invoke();
         }
 
         private void EnableBehaviour(bool enabled)
