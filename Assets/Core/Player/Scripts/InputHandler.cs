@@ -13,6 +13,7 @@ namespace CaveHike.Player
             _playerMovement = GetComponent<PlayerMovement>();
             _grapplerHandler = GetComponent<GrappleHandler>();
         }
+
         public void OnMove(InputValue value)
         {
             _playerMovement.OnMoveInput(value.Get<Vector2>());

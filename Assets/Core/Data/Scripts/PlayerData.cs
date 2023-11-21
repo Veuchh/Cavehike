@@ -10,7 +10,7 @@ namespace CaveHike.Data
         public Vector2 CurrentInput { get => _currentInput; set => _currentInput = value; }
         public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
         public Collider Collider { get => _collider; set => _collider = value; }
-        public Vector2 CurrentRightStickInput { get => _currentRightStickInput; set => _currentRightStickInput = value; }
+        public Vector2 CurrentGrappleAimInput { get => _currentRightStickInput; set => _currentRightStickInput = value; }
         public bool IsGrappling { get => _isGrappling; set => _isGrappling = value; }
 
         private CharacterController _controller;

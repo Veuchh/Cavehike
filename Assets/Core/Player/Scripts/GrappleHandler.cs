@@ -9,14 +9,16 @@ namespace CaveHike.Player
     {
         [SerializeField] Rigidbody _targetRigidbody;
         [SerializeField] LineRenderer _lr;
-        [SerializeField] LayerMask targetableGrapple;
-        [SerializeField] float grappleMaxDistance;
+        [SerializeField] LayerMask _targetableGrapple;
+        [SerializeField] float _grappleMaxDistance;
+        [SerializeField] float _sphereCastRadius = 1f;
+        [SerializeField] float _swingStrength = 1f;
 
         PlayerEntity _player;
         PlayerMovement _playerMovement;
         ConfigurableJoint _joint;
 
-        private void Awake()
+        private void Start()
         {
             _player = GetComponent<PlayerEntity>();
             _playerMovement = GetComponent<PlayerMovement>();
@@ -32,38 +34,53 @@ namespace CaveHike.Player
 
         void Update()
         {
+
+            Debug.DrawRay(transform.position, _player.PlayerData.CurrentGrappleAimInput * _grappleMaxDistance, Color.red);
             if (_player.PlayerData.IsGrappling)
             {
                 _lr.SetPosition(0, transform.position);
                 _lr.SetPosition(1, _targetRigidbody.transform.position);
             }
 
-            else if (_player.PlayerData.CurrentRightStickInput != Vector2.zero)
+            else if (_player.PlayerData.CurrentGrappleAimInput != Vector2.zero)
             {
-                Ray ray = new Ray(transform.position, _player.PlayerData.CurrentRightStickInput);
+                _targetRigidbody.gameObject.SetActive(false); 
+                
+                RaycastHit hit = GetAimPosition();
 
-                if (Physics.Raycast(ray, out RaycastHit hit, grappleMaxDistance, targetableGrapple))
+                if (hit.collider != null)
                 {
                     _targetRigidbody.transform.position = hit.point;
+                    _targetRigidbody.gameObject.SetActive(true);
                 }
+            }
+
+            else
+            {
+                _targetRigidbody.gameObject.SetActive(false);
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (_player.PlayerData.IsGrappling)
+            {
+                _player.PlayerData.Rigidbody.AddForce(Vector3.right * _player.PlayerData.CurrentInput.x * _swingStrength, ForceMode.VelocityChange);
             }
         }
 
         public void OnAimInput(Vector2 aimDirection)
         {
-            _player.PlayerData.CurrentRightStickInput = aimDirection;
+            _player.PlayerData.CurrentGrappleAimInput = aimDirection;
         }
 
         public void OnGrappleInput(bool isGrapplePressed)
         {
             if (isGrapplePressed)
             {
-                Debug.LogWarning("TODO : Behaviour when no right stick input");
-                Vector3 rayDirection = (_player.PlayerData.CurrentRightStickInput == Vector2.zero) ? Vector3.right : _player.PlayerData.CurrentRightStickInput;
+                RaycastHit hit = GetAimPosition();
 
-                Ray ray = new Ray(transform.position, rayDirection);
-
-                if (Physics.Raycast(ray, out RaycastHit hit, grappleMaxDistance, targetableGrapple))
+                if (hit.collider != null)
                 {
                     _targetRigidbody.transform.position = hit.point;
                     _player.PlayerData.IsGrappling = true;
@@ -86,7 +103,6 @@ namespace CaveHike.Player
 
         private void EnableBehaviour(bool enabled)
         {
-
             if (!enabled)
             {
                 _playerMovement.SetVelocity(_player.PlayerData.Rigidbody.velocity);
@@ -97,6 +113,7 @@ namespace CaveHike.Player
             _player.PlayerData.Controller.enabled = !enabled;
             _player.PlayerData.Rigidbody.useGravity = enabled;
             _player.PlayerData.Rigidbody.isKinematic = !enabled;
+            _lr.enabled = enabled;
 
             _joint.connectedBody =
                 enabled ?
@@ -112,6 +129,23 @@ namespace CaveHike.Player
 
                 _player.PlayerData.Rigidbody.velocity = _player.PlayerData.Controller.velocity;
             }
+        }
+
+        RaycastHit GetAimPosition()
+        {
+            RaycastHit hit = new RaycastHit();
+            Ray ray = new Ray(transform.position, _player.PlayerData.CurrentGrappleAimInput);
+            Physics.Raycast(ray, out hit, _grappleMaxDistance, _targetableGrapple);
+
+            if (hit.collider != null)
+            {
+                return hit;
+
+            }
+
+            Physics.SphereCast(ray, _sphereCastRadius, out hit, _grappleMaxDistance, _targetableGrapple);
+
+            return hit;
         }
     }
 }

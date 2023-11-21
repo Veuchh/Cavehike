@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1871170560215953447}
   - component: {fileID: 4175558006488599745}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: GrappleTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 3abc1a54387a6d6418fe826c5765771b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -470,10 +470,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetRigidbody: {fileID: 1871170560215953447}
   _lr: {fileID: 5599435508313333941}
-  targetableGrapple:
+  _targetableGrapple:
     serializedVersion: 2
     m_Bits: 55
-  grappleMaxDistance: 50
+  _grappleMaxDistance: 50
+  _sphereCastRadius: 5
+  _swingStrength: 0.1
 --- !u!54 &3750415333687481477
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -577,7 +579,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
+  - {fileID: 2100000, guid: 3abc1a54387a6d6418fe826c5765771b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -603,7 +605,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.3
     widthCurve:
       serializedVersion: 2
       m_Curve:
