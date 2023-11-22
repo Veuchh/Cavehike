@@ -106,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
     public void SetVelocity(Vector3 newVelocity)
     {
         _velocity = newVelocity;
+        Debug.Log($"CharacterController >> Velocity set to {newVelocity}");
     }
 
     IEnumerator StartFastFall()

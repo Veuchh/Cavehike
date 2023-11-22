@@ -1827,31 +1827,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6964612235677298495, guid: 0554f99760ce1ad4e88d244fbb32a03b,
-        type: 3}
-      propertyPath: _swingStrength
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6964612235677298495, guid: 0554f99760ce1ad4e88d244fbb32a03b,
-        type: 3}
-      propertyPath: _pullSurfaceLayer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6964612235677298495, guid: 0554f99760ce1ad4e88d244fbb32a03b,
-        type: 3}
-      propertyPath: _targetableGrapple.m_Bits
-      value: 183
-      objectReference: {fileID: 0}
-    - target: {fileID: 7936528687525766647, guid: 0554f99760ce1ad4e88d244fbb32a03b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7936528687525766647, guid: 0554f99760ce1ad4e88d244fbb32a03b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

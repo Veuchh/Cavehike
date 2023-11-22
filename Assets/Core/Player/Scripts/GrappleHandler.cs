@@ -18,12 +18,15 @@ namespace CaveHike.Player
         [SerializeField] float _sphereCastRadius = 1f;
         [SerializeField] float _swingStrength = 1f;
         [SerializeField] float _pullingStrength = 1f;
+        [SerializeField] float _releaseVelocityMultiplier = 10f;
 
         public static event Action OnGrapple;
 
         PlayerEntity _player;
         PlayerMovement _playerMovement;
         ConfigurableJoint _joint;
+        Vector3 _storedPosition;
+        Vector3 _currentVelocity;
 
         private void Start()
         {
@@ -66,6 +69,8 @@ namespace CaveHike.Player
             {
                 _targetRigidbody.gameObject.SetActive(false);
             }
+
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
         }
 
         private void FixedUpdate()
@@ -82,6 +87,9 @@ namespace CaveHike.Player
 
                 _joint.linearLimit = softJointLimit;
             }
+            _currentVelocity = transform.position - _storedPosition;
+            _storedPosition = transform.position;
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
         }
 
         public void OnAimInput(Vector2 aimDirection)
@@ -122,12 +130,15 @@ namespace CaveHike.Player
 
         private void SetBehaviour(GrappleState grappleState)
         {
+            bool wasGrappling = _player.PlayerData.GrapplingState != GrappleState.None;
             _player.PlayerData.GrapplingState = grappleState;
 
-            if (grappleState == GrappleState.None)
+            if (grappleState == GrappleState.None && wasGrappling)
             {
-                _playerMovement.SetVelocity(_player.PlayerData.Rigidbody.velocity);
+                _playerMovement.SetVelocity(_currentVelocity * _releaseVelocityMultiplier);
             }
+
+            _storedPosition = transform.position;
 
             _player.PlayerData.Collider.enabled = grappleState != GrappleState.None;
             _player.PlayerData.Controller.enabled = grappleState == GrappleState.None;

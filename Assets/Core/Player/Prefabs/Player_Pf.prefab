@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 2381126558755301285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.58, y: 5.17, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -422,6 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ac91389a3c4924e9d1db845dc08857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cinemachineBrain: {fileID: 0}
   _vcam: {fileID: 0}
   _horizontalCamCatchupSpeed: 0.01
   _camSeeFartherMultiplier: 0.08
@@ -470,12 +471,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetRigidbody: {fileID: 1871170560215953447}
   _lr: {fileID: 5599435508313333941}
+  _pullSurfaceLayer: 7
   _targetableGrapple:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   _grappleMaxDistance: 50
   _sphereCastRadius: 5
-  _swingStrength: 0.1
+  _swingStrength: 0.4
+  _pullingStrength: 1
+  _releaseVelocityMultiplier: 50
 --- !u!54 &3750415333687481477
 Rigidbody:
   m_ObjectHideFlags: 0
