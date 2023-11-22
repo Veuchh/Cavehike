@@ -1,3 +1,4 @@
+using CaveHike.Data;
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace CaveHike.Player
 
         void OnGrapple()
         {
-            _cinemachineBrain.m_UpdateMethod = _playerEntity.PlayerData.IsGrappling ? CinemachineBrain.UpdateMethod.FixedUpdate : CinemachineBrain.UpdateMethod.LateUpdate;
+            _cinemachineBrain.m_UpdateMethod = _playerEntity.PlayerData.GrapplingState != GrappleState.None ? CinemachineBrain.UpdateMethod.FixedUpdate : CinemachineBrain.UpdateMethod.LateUpdate;
         }
 
         private void Update()

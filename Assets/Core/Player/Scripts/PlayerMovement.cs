@@ -1,3 +1,4 @@
+using CaveHike.Data;
 using CaveHike.Player;
 using NaughtyAttributes;
 using System;
@@ -19,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _fastFallStartupDelay = .1f;
 
     int _remainingJumps;
-    bool _isJumpButtonPressed = false;
     Coroutine _startJumpDownRoutine;
     PlayerEntity _playerEntity;
     Vector3 _velocity;
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_playerEntity.PlayerData.IsGrappling)
+        if (_playerEntity.PlayerData.GrapplingState != GrappleState.None)
             return;
         
         if (_playerEntity.PlayerData.Controller.isGrounded && _velocity.y < 0)
@@ -87,8 +87,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJumpInput(bool isJumpPressed)
     {
-        _isJumpButtonPressed = isJumpPressed;
-
         if (isJumpPressed && _remainingJumps > 0)
         {
             if (_startJumpDownRoutine != null)

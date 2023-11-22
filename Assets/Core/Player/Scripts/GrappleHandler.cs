@@ -1,4 +1,6 @@
+using CaveHike.Data;
 using Cinemachine;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,10 +12,12 @@ namespace CaveHike.Player
     {
         [SerializeField] Rigidbody _targetRigidbody;
         [SerializeField] LineRenderer _lr;
+        [SerializeField, Layer] int _pullSurfaceLayer;
         [SerializeField] LayerMask _targetableGrapple;
         [SerializeField] float _grappleMaxDistance;
         [SerializeField] float _sphereCastRadius = 1f;
         [SerializeField] float _swingStrength = 1f;
+        [SerializeField] float _pullingStrength = 1f;
 
         public static event Action OnGrapple;
 
@@ -32,14 +36,14 @@ namespace CaveHike.Player
             _lr.transform.parent = null;
             _lr.transform.position = Vector3.zero;
 
-            EnableBehaviour(false);
+            SetBehaviour(GrappleState.None);
         }
 
         void Update()
         {
             Debug.DrawRay(transform.position, _player.PlayerData.CurrentGrappleAimInput * _grappleMaxDistance, Color.red);
-         
-            if (_player.PlayerData.IsGrappling)
+
+            if (_player.PlayerData.GrapplingState != GrappleState.None)
             {
                 _lr.SetPosition(0, transform.position);
                 _lr.SetPosition(1, _targetRigidbody.transform.position);
@@ -47,8 +51,8 @@ namespace CaveHike.Player
 
             else if (_player.PlayerData.CurrentGrappleAimInput != Vector2.zero)
             {
-                _targetRigidbody.gameObject.SetActive(false); 
-                
+                _targetRigidbody.gameObject.SetActive(false);
+
                 RaycastHit hit = GetAimPosition();
 
                 if (hit.collider != null)
@@ -66,9 +70,17 @@ namespace CaveHike.Player
 
         private void FixedUpdate()
         {
-            if (_player.PlayerData.IsGrappling)
+            if (_player.PlayerData.GrapplingState == GrappleState.Grappling)
             {
                 _player.PlayerData.Rigidbody.AddForce(Vector3.right * _player.PlayerData.CurrentInput.x * _swingStrength, ForceMode.VelocityChange);
+            }
+
+            else if (_player.PlayerData.GrapplingState == GrappleState.AttractedToObject)
+            {
+                SoftJointLimit softJointLimit = new SoftJointLimit();
+                softJointLimit.limit = _joint.linearLimit.limit - _pullingStrength;
+
+                _joint.linearLimit = softJointLimit;
             }
         }
 
@@ -86,46 +98,49 @@ namespace CaveHike.Player
                 if (hit.collider != null)
                 {
                     _targetRigidbody.transform.position = hit.point;
-                    _player.PlayerData.IsGrappling = true;
-                    EnableBehaviour(true);
+
+                    if (hit.collider.gameObject.layer == _pullSurfaceLayer)
+                    {
+                        SetBehaviour(GrappleState.AttractedToObject);
+                    }
+                    else
+                    {
+                        SetBehaviour(GrappleState.Grappling);
+                    }
                 }
                 else
                 {
-                    _player.PlayerData.IsGrappling = false;
+                    _player.PlayerData.GrapplingState = GrappleState.None;
                 }
             }
             else
             {
-                if (_player.PlayerData.IsGrappling)
-                {
-                    EnableBehaviour(false);
-                }
-                _player.PlayerData.IsGrappling = false;
+                SetBehaviour(GrappleState.None);
             }
 
-            OnGrapple?.Invoke();
         }
 
-        private void EnableBehaviour(bool enabled)
+        private void SetBehaviour(GrappleState grappleState)
         {
-            if (!enabled)
+            _player.PlayerData.GrapplingState = grappleState;
+
+            if (grappleState == GrappleState.None)
             {
                 _playerMovement.SetVelocity(_player.PlayerData.Rigidbody.velocity);
             }
 
-
-            _player.PlayerData.Collider.enabled = enabled;
-            _player.PlayerData.Controller.enabled = !enabled;
-            _player.PlayerData.Rigidbody.useGravity = enabled;
-            _player.PlayerData.Rigidbody.isKinematic = !enabled;
-            _lr.enabled = enabled;
+            _player.PlayerData.Collider.enabled = grappleState != GrappleState.None;
+            _player.PlayerData.Controller.enabled = grappleState == GrappleState.None;
+            _player.PlayerData.Rigidbody.useGravity = grappleState != GrappleState.None;
+            _player.PlayerData.Rigidbody.isKinematic = grappleState == GrappleState.None;
+            _lr.enabled = grappleState != GrappleState.None;
 
             _joint.connectedBody =
-                enabled ?
-                    _player.PlayerData.Rigidbody :
-                    null;
+                grappleState == GrappleState.None ?
+                    null :
+                    _player.PlayerData.Rigidbody;
 
-            if (enabled)
+            if (grappleState != GrappleState.None)
             {
                 SoftJointLimit softJointLimit = new SoftJointLimit();
                 softJointLimit.limit = Vector3.Distance(transform.position, _joint.transform.position);
@@ -134,6 +149,8 @@ namespace CaveHike.Player
 
                 _player.PlayerData.Rigidbody.velocity = _player.PlayerData.Controller.velocity;
             }
+
+            OnGrapple?.Invoke();
         }
 
         RaycastHit GetAimPosition()
