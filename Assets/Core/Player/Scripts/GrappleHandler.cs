@@ -27,6 +27,7 @@ namespace CaveHike.Player
         ConfigurableJoint _joint;
         Vector3 _storedPosition;
         Vector3 _currentVelocity;
+        Vector3 _grappleStartDir;
 
         private void Start()
         {
@@ -82,10 +83,22 @@ namespace CaveHike.Player
 
             else if (_player.PlayerData.GrapplingState == GrappleState.AttractedToObject)
             {
-                SoftJointLimit softJointLimit = new SoftJointLimit();
-                softJointLimit.limit = _joint.linearLimit.limit - _pullingStrength;
+                if (Vector3.Distance(_targetRigidbody.position, transform.position) > 1f)
+                {
+                    _player.PlayerData.Rigidbody.AddForce((_targetRigidbody.position - transform.position).normalized * _pullingStrength, ForceMode.VelocityChange);
+                }
 
-                _joint.linearLimit = softJointLimit;
+                if (Mathf.Sign(_grappleStartDir.x) != Mathf.Sign(_targetRigidbody.position.x - transform.position.x))
+                {
+                    _player.PlayerData.Rigidbody.velocity = new Vector3(0, _player.PlayerData.Rigidbody.velocity.y, 0);
+                    transform.position = new Vector3(_targetRigidbody.transform.position.x, transform.position.y, 0);
+                }
+
+                if (Mathf.Sign(_grappleStartDir.y) != Mathf.Sign(_targetRigidbody.position.y - transform.position.y))
+                {
+                    _player.PlayerData.Rigidbody.velocity = new Vector3(_player.PlayerData.Rigidbody.velocity.x, 0, 0);
+                    transform.position = new Vector3(transform.position.x, _targetRigidbody.transform.position.y, 0);
+                }
             }
             _currentVelocity = transform.position - _storedPosition;
             _storedPosition = transform.position;
@@ -142,16 +155,16 @@ namespace CaveHike.Player
 
             _player.PlayerData.Collider.enabled = grappleState != GrappleState.None;
             _player.PlayerData.Controller.enabled = grappleState == GrappleState.None;
-            _player.PlayerData.Rigidbody.useGravity = grappleState != GrappleState.None;
+            _player.PlayerData.Rigidbody.useGravity = grappleState == GrappleState.Grappling;
             _player.PlayerData.Rigidbody.isKinematic = grappleState == GrappleState.None;
             _lr.enabled = grappleState != GrappleState.None;
 
             _joint.connectedBody =
-                grappleState == GrappleState.None ?
-                    null :
-                    _player.PlayerData.Rigidbody;
+                grappleState == GrappleState.Grappling ?
+                    _player.PlayerData.Rigidbody :
+                    null;
 
-            if (grappleState != GrappleState.None)
+            if (grappleState == GrappleState.Grappling)
             {
                 SoftJointLimit softJointLimit = new SoftJointLimit();
                 softJointLimit.limit = Vector3.Distance(transform.position, _joint.transform.position);
@@ -159,6 +172,11 @@ namespace CaveHike.Player
                 _joint.linearLimit = softJointLimit;
 
                 _player.PlayerData.Rigidbody.velocity = _player.PlayerData.Controller.velocity;
+            }
+
+            if (grappleState == GrappleState.AttractedToObject)
+            {
+                _grappleStartDir = _targetRigidbody.position - transform.position;
             }
 
             OnGrapple?.Invoke();

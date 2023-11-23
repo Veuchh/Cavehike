@@ -478,7 +478,7 @@ MonoBehaviour:
   _grappleMaxDistance: 50
   _sphereCastRadius: 5
   _swingStrength: 0.4
-  _pullingStrength: 1
+  _pullingStrength: 5
   _releaseVelocityMultiplier: 50
 --- !u!54 &3750415333687481477
 Rigidbody:
