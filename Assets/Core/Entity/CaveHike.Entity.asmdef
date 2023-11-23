@@ -1,12 +1,8 @@
 {
-    "name": "CaveHike.Player",
+    "name": "CaveHike.Entity",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
-        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
-        "GUID:250c281765e9d1348a9375352a7e0032",
-        "GUID:4fc2520c3d50c9d4b8b0153d49cb29a1",
-        "GUID:4307f53044263cf4b835bd812fc161a4"
+        "GUID:250c281765e9d1348a9375352a7e0032"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
