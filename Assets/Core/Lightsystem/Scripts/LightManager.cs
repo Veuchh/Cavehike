@@ -105,7 +105,7 @@ namespace Core.Lightsystem
 
         public void UnregisterLightblocker(Transform blocker)
         {
-            Destroy(_lightBlockers[blocker]);
+            Destroy(_lightBlockers[blocker].gameObject);
             _lightBlockers.Remove(blocker);
         }
     }
