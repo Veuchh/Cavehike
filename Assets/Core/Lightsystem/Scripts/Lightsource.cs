@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +17,8 @@ namespace Core.Lightsystem
         private float _distance; //Distance between the lightsource and ZReferenceLayer (basically the z of the 2d gameplay)
         private float _innerToOuterSpot; //The value that must be added to find the inner sot from the outerspot, in degrees
 
+        [HideInInspector] public Action<Lightsource> OnRangeUpdate;  
+
         public float Range
         {
             get => _range; set
@@ -22,6 +26,7 @@ namespace Core.Lightsystem
                 _range = value;
                 UpdateLight();
                 UpdateCollider();
+                OnRangeUpdate?.Invoke(this);
             }
         }
 
@@ -38,18 +43,15 @@ namespace Core.Lightsystem
             UpdateCollider();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
+        #region Components updates
         /// <summary>
         /// 
         /// </summary>
         /// <param name="noCrunch">If true the outer angle will be capped between the difference between inner and outer angle and max spot angle</param>
         public void UpdateLight(bool noCrunch = false)
         {
+            if(_spotLight==null) return;
+
             float outerAngle = Mathf.Rad2Deg * GetAngleInRadians();
 
             if (noCrunch)
@@ -67,7 +69,8 @@ namespace Core.Lightsystem
         {
             _collider.radius = Range;
         }
-
+        #endregion
+        #region computations and get
         public float GetDistance()
         {
             float distance = Mathf.Abs(transform.position.z - _spotLight.transform.position.z);
@@ -85,6 +88,27 @@ namespace Core.Lightsystem
         {
             _innerToOuterSpot = _spotLight.spotAngle - _spotLight.innerSpotAngle;
         }
+        #endregion
+        #region Animations
+        public enum AnimationDuractionFactor //What decides the duration of the animation ?
+        {
+            DurationBySpeed, //You give the speed in unit of range per second and the time is calculated accordingly
+            DurationByTime //You give the duration you want and the speed is calculated accordingly
+        }
+        public void ProgressivelyChangeRange(float targetRange, float duration, AnimationDuractionFactor animationDuractionFactor= AnimationDuractionFactor.DurationByTime)
+        {
+            if(animationDuractionFactor== AnimationDuractionFactor.DurationBySpeed)
+            {
+                duration = Mathf.Abs(targetRange - Range) / duration;
+            }
+
+            DOTween.To(x => { this.Range = x; }, this.Range, targetRange, duration);
+        }
+        public void ProgressivelyChangeRange(float targetRange)
+        {
+            ProgressivelyChangeRange(targetRange, 0.5f);
+        }
+        #endregion
 
 #if UNITY_EDITOR
         public void SetDistance()

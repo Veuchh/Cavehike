@@ -1,0 +1,246 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4752414021080914238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3992624499855585681}
+  - component: {fileID: 8466400805286740436}
+  - component: {fileID: 2242445860172417963}
+  - component: {fileID: 8931884520759721773}
+  m_Layer: 8
+  m_Name: Torch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3992624499855585681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752414021080914238}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.22, y: 3.56, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1018646149080289598}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &8466400805286740436
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752414021080914238}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.66
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2242445860172417963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752414021080914238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1606c4b07bd284c82da1bc5a500236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnEnterLight:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6945664460326356998}
+        m_TargetAssemblyTypeName: Core.Lightsystem.Lightsource, Lightsystem
+        m_MethodName: ProgressivelyChangeRange
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 3
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnExitLight:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6945664460326356998}
+        m_TargetAssemblyTypeName: Core.Lightsystem.Lightsource, Lightsystem
+        m_MethodName: ProgressivelyChangeRange
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnStayLight:
+    m_PersistentCalls:
+      m_Calls: []
+  _activateOnStayLight: 0
+  _activateOnExitLight: 1
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+--- !u!54 &8931884520759721773
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752414021080914238}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1001 &1471038917133665859
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3992624499855585681}
+    m_Modifications:
+    - target: {fileID: 1819897704413918056, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_Name
+      value: LightSource
+      objectReference: {fileID: 0}
+    - target: {fileID: 1819897704413918056, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5802745939422770978, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8361455109586669125, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: _range
+      value: 8.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169081326857589051, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_SpotAngle
+      value: 7.3000183
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169081326857589051, guid: 202a94100b7cd3647a97d87f7493f83d,
+        type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 202a94100b7cd3647a97d87f7493f83d, type: 3}
+--- !u!4 &1018646149080289598 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1894004846009718653, guid: 202a94100b7cd3647a97d87f7493f83d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1471038917133665859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6945664460326356998 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8361455109586669125, guid: 202a94100b7cd3647a97d87f7493f83d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1471038917133665859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d76b7f6d6d37442b5a0b83fae8b306, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

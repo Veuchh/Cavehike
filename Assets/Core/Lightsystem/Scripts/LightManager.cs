@@ -5,7 +5,9 @@ using UnityEngine;
 namespace Core.Lightsystem
 {
     /// <summary>
-    /// Light manager is a singleton that will manage all the lights in the scene, it will often refer to "Light world" which is the area filmed by the CamToRenderTexture Camera that simulates circular lights
+    /// Light manager is a singleton that will manage all the lights in the scene,
+    /// it will often refer to "Light world" which is the area filmed by the CamToRenderTexture Camera that simulates circular lights
+    /// As  opposed to the "Real world" where the actual  games happen
     /// </summary>
     public class LightManager : MonoBehaviour
     {
@@ -68,16 +70,26 @@ namespace Core.Lightsystem
             equivalent.position = _lightWorldCamera.transform.position + (original.position - Camera.main.transform.position);
         }
 
+        /// <summary>
+        /// Update the range of the light in light world
+        /// </summary>
+        /// <param name="originalLightsource">The light in the real world</param>
+        public void UpdateLightRange(Lightsource originalLightsource)
+        {
+            _lightsourcesAndEquivalents[originalLightsource].range = originalLightsource.Range;
+        }
+
         //Call it when a new lightsource arrive on screen
         public void RegisterLightsource(Lightsource lightsource)
         {
             var go = Instantiate(_lightPrefab);
-            Light light = go.GetComponent<Light>();
-            light.range = lightsource.Range;
+            Light light = go.GetComponent<Light>();  
             go.transform.parent = this.transform;
             _lightsourcesAndEquivalents.Add(lightsource, light);
 
             SynchronizeEquivalent(lightsource.transform, go.transform);
+            UpdateLightRange(lightsource);
+            lightsource.OnRangeUpdate += UpdateLightRange;
         }
 
         public void UnregisterLightsource(Lightsource lightsource)
