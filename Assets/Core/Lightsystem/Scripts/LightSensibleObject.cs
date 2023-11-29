@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
+using UnityEngine.Serialization;
+using NaughtyAttributes;
 
 namespace Core.Lightsystem
 {
@@ -15,11 +17,12 @@ namespace Core.Lightsystem
         [SerializeField] private bool _activateOnExitLight;
 
         [Tooltip("Obstacles layer mask")]
-        [SerializeField] private LayerMask _layerMask;
+        [FormerlySerializedAs("_layerMask")] [SerializeField] private LayerMask _obstaclesLayerMask;
 
         private List<Lightsource> _lightSources=new List<Lightsource>();
         private float _colliderRadius;
 
+        [ShowNonSerializedField]
         private bool _isOn = false;
         private bool IsOn
         {
@@ -49,7 +52,7 @@ namespace Core.Lightsystem
 
         private void Start()
         {
-            _colliderRadius = GetComponent<SphereCollider>().radius;
+            _colliderRadius = Mathf.Max(GetComponent<Collider>().bounds.extents.x, GetComponent<Collider>().bounds.extents.y, GetComponent<Collider>().bounds.extents.z);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -97,7 +100,7 @@ namespace Core.Lightsystem
         private bool LightIsInSight(Lightsource lightSource)
         {
             RaycastHit raycastHit;
-            Physics.Raycast(transform.position, (lightSource.transform.position - transform.position),out raycastHit, Mathf.Infinity,_layerMask);
+            Physics.Raycast(transform.position, (lightSource.transform.position - transform.position),out raycastHit, Mathf.Infinity,_obstaclesLayerMask);
 
             if(raycastHit.collider == null) return true;
             if (raycastHit.distance >= Vector3.Distance(transform.position,lightSource.transform.position)-_colliderRadius) return true;

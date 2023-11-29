@@ -13,7 +13,11 @@ namespace Core.Lightsystem
                 LightManager.Instance.RegisterLightsource(other.GetComponent<Lightsource>());
                 return;
             }
-            LightManager.Instance.RegisterLightblocker(other.transform);
+            if(other.GetComponent<LightInteractingMesh>() != null)
+            {
+                LightManager.Instance.RegisterLightInteractingMesh(other.GetComponent<LightInteractingMesh>());
+            }
+            
         }
 
         private void OnTriggerExit(Collider other)
@@ -23,7 +27,11 @@ namespace Core.Lightsystem
                 LightManager.Instance.UnregisterLightsource(other.GetComponent<Lightsource>());
                 return;
             }
-            LightManager.Instance.UnregisterLightblocker(other.transform);
+            
+            if (other.GetComponent<LightInteractingMesh>() != null)
+            {
+                LightManager.Instance.UnregisterLightblocker(other.transform);
+            }
         }
     }
 }

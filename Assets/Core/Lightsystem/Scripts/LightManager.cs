@@ -37,6 +37,8 @@ namespace Core.Lightsystem
 
         [Tooltip("Prefab used to make the light blockers in light world")]
         [SerializeField] private GameObject _lightBlockerPrefab;
+        [Tooltip("Prefab used to make the glow  in the dark  meshes in light world")]
+        [SerializeField] private GameObject _glowInTheDarkPrefab;
 
         //Each light source in the level is associated with a transform in light world
         private Dictionary<Lightsource, Light> _lightsourcesAndEquivalents=new Dictionary<Lightsource, Light>();
@@ -99,20 +101,33 @@ namespace Core.Lightsystem
         }
 
         //Same for light blockers
-        public void RegisterLightblocker(Transform blocker)
+        public void RegisterLightInteractingMesh(LightInteractingMesh  liMesh)
         {
-            var meshFilter = blocker.GetComponentInChildren<MeshFilter>();
+            var meshFilter = liMesh.MeshFilter;
             if (meshFilter == null) return;
             if (meshFilter.mesh == null) return;
 
-            var go = Instantiate(_lightBlockerPrefab);
-            go.transform.localScale = blocker.lossyScale;
-            go.transform.rotation = blocker.rotation;
+            GameObject go;
+
+
+            switch (liMesh.Type)
+            {
+                case LightInteractingMesh.LightInteractingMeshType.VisibleInTheDark:
+                    go = Instantiate(_glowInTheDarkPrefab);
+                    go.GetComponent<MeshRenderer>().material.color = new Color(liMesh.GlowAmount, liMesh.GlowAmount, liMesh.GlowAmount); ;
+                    break;         
+                default:
+                    go = Instantiate(_lightBlockerPrefab);
+                    break;
+            }
+            
+            go.transform.localScale = liMesh.transform.lossyScale;
+            go.transform.rotation = liMesh.transform.rotation;
             go.GetComponent<MeshFilter>().mesh = meshFilter.mesh;
             go.transform.parent = this.transform;
-            _lightBlockers.Add(blocker, go.transform);
+            _lightBlockers.Add(liMesh.transform, go.transform);
 
-            SynchronizeEquivalent(blocker.transform, go.transform);
+            SynchronizeEquivalent(liMesh.transform, go.transform);
         }
 
         public void UnregisterLightblocker(Transform blocker)
