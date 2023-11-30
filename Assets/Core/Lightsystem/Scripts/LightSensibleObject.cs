@@ -17,11 +17,11 @@ namespace Core.Lightsystem
         [SerializeField] protected bool _activateOnExitLight;
         [Tooltip("Delay  the activation of the OnExitLight event")]
         [SerializeField] private float _onExitDelay = 0f;
+        //Set true when the light stop shining on the object, and false when the objects  fully turns off.  Avoid being turned on before we should
+        private bool _onExitBeingResolved = false;
 
         [Tooltip("Obstacles layer mask")]
         [FormerlySerializedAs("_layerMask")] [SerializeField] private LayerMask _obstaclesLayerMask;
-
-
 
         private List<Lightsource> _lightSources=new List<Lightsource>();
         private float _colliderRadius;
@@ -38,6 +38,13 @@ namespace Core.Lightsystem
             {
                 if (_isOn == value) return; 
                 _isOn = value;
+
+                if(_isOn && _onExitBeingResolved)
+                {
+                    _onExitBeingResolved = false;
+                    StopCoroutine(_delayedExitLightCoroutine);
+                    return;
+                }
                 
                 if(_isOn)
                 {
@@ -59,6 +66,7 @@ namespace Core.Lightsystem
         private void OnExitLightFunction()
         {
             if (_delayedExitLightCoroutine != null) StopCoroutine(_delayedExitLightCoroutine);
+            _onExitBeingResolved = true;
             _delayedExitLightCoroutine = StartCoroutine(DelayedExitLightCoroutine());
         }
 
@@ -66,6 +74,7 @@ namespace Core.Lightsystem
         {
             yield return new WaitForSeconds(_onExitDelay);
             OnExitLight?.Invoke();
+            _onExitBeingResolved = false;
         }
 
         private void Start()
