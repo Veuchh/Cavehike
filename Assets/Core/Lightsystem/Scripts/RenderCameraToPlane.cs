@@ -49,6 +49,10 @@ namespace Core.Lightsystem
             float planeHeight = _plane.transform.localScale.y;
             //Width and thickness are negative because the plane is facing the camera 
             float planeWidth = -planeHeight * ((float)_screenWidth / (float)_screenHeight);
+
+            Debug.Log("Plane width: " + planeWidth + " height: " + planeHeight);
+            Debug.Log(_screenHeight + " " + _screenWidth);
+
             _plane.transform.localScale = new Vector3(planeWidth, planeHeight, -1);
         }
     }
