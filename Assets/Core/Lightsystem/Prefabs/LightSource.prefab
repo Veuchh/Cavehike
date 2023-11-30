@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1894004846009718653}
   - component: {fileID: 8361455109586669125}
   - component: {fileID: 5802745939422770978}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: LightSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 1885281566094537368}
   - component: {fileID: 9169081326857589051}
   - component: {fileID: 6346214256478756182}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Spot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
