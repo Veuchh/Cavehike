@@ -5,77 +5,17 @@ using UnityEngine.Events;
 using System.Linq;
 using UnityEngine.Serialization;
 using NaughtyAttributes;
+using Core.SensibleObjects;
 
 namespace Core.Lightsystem
 {
-    public class LightSensibleObject : MonoBehaviour
+    public class LightSensibleObject : SensibleObject
     {
-        public UnityEvent OnEnterLight;
-        public UnityEvent OnExitLight;
-        public UnityEvent OnStayLight;
-        [SerializeField] private bool _activateOnStayLight;
-        [SerializeField] protected bool _activateOnExitLight;
-        [Tooltip("Delay  the activation of the OnExitLight event")]
-        [SerializeField] private float _onExitDelay = 0f;
-        //Set true when the light stop shining on the object, and false when the objects  fully turns off.  Avoid being turned on before we should
-        private bool _onExitBeingResolved = false;
-
         [Tooltip("Obstacles layer mask")]
-        [FormerlySerializedAs("_layerMask")] [SerializeField] private LayerMask _obstaclesLayerMask;
+        [FormerlySerializedAs("_layerMask")][SerializeField] private LayerMask _obstaclesLayerMask;
 
-        private List<Lightsource> _lightSources=new List<Lightsource>();
+        private List<Lightsource> _lightSources = new List<Lightsource>();
         private float _colliderRadius;
-
-        [ShowNonSerializedField]
-        private bool _isOn = false;
-        private bool IsOn
-        {
-            get
-            {
-                return _isOn;
-            }
-            set
-            {
-                if (_isOn == value) return; 
-                _isOn = value;
-
-                if(_isOn && _onExitBeingResolved)
-                {
-                    _onExitBeingResolved = false;
-                    StopCoroutine(_delayedExitLightCoroutine);
-                    return;
-                }
-                
-                if(_isOn)
-                {
-                    OnEnterLight?.Invoke();
-                    if (_activateOnExitLight || _activateOnExitLight) return;
-                    this.enabled = false; //We don't have any event to invoke on stay  or exit, we are useless  now that we have been lighted, we should stop updating
-                    return;
-                }
-
-                if(_activateOnExitLight)
-                {
-                    OnExitLightFunction();
-                }
-            }
-        }
-
-        private Coroutine _delayedExitLightCoroutine;
-
-        private void OnExitLightFunction()
-        {
-            if (_delayedExitLightCoroutine != null) StopCoroutine(_delayedExitLightCoroutine);
-            _onExitBeingResolved = true;
-            _delayedExitLightCoroutine = StartCoroutine(DelayedExitLightCoroutine());
-        }
-
-        private IEnumerator DelayedExitLightCoroutine()
-        {
-            yield return new WaitForSeconds(_onExitDelay);
-            OnExitLight?.Invoke();
-            _onExitBeingResolved = false;
-        }
 
         private void Start()
         {
@@ -110,13 +50,13 @@ namespace Core.Lightsystem
         private void Update()
         {
             if (_lightSources.Count == 0) return;
-            if (IsOn && !_activateOnExitLight && !_activateOnStayLight) return;
+            if (IsOn && !_activateOnTurnOff && !_activateOnStayOn) return;
 
             bool lighted = false;
             foreach (Lightsource lightSource in _lightSources)
             {
                 if(!LightIsInSight(lightSource)) continue;
-                if (IsOn && _activateOnStayLight) OnStayLight?.Invoke();
+                if (IsOn && _activateOnStayOn) OnStayOn?.Invoke();
                 lighted = true;
                 break;
             }

@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a1606c4b07bd284c82da1bc5a500236, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnEnterLight:
+  OnTurnOn:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5505751073177324344}
@@ -143,7 +143,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  OnExitLight:
+  OnTurnOff:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5505751073177324344}
@@ -170,12 +170,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnStayLight:
+  OnStayOn:
     m_PersistentCalls:
       m_Calls: []
-  _activateOnStayLight: 0
-  _activateOnExitLight: 1
-  _onExitDelay: 4
+  _activateOnStayOn: 0
+  _activateOnTurnOff: 1
+  _onTurnOffDelay: 4
   _obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 2048
