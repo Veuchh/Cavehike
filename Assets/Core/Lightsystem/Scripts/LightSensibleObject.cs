@@ -14,10 +14,14 @@ namespace Core.Lightsystem
         public UnityEvent OnExitLight;
         public UnityEvent OnStayLight;
         [SerializeField] private bool _activateOnStayLight;
-        [SerializeField] private bool _activateOnExitLight;
+        [SerializeField] protected bool _activateOnExitLight;
+        [Tooltip("Delay  the activation of the OnExitLight event")]
+        [SerializeField] private float _onExitDelay = 0f;
 
         [Tooltip("Obstacles layer mask")]
         [FormerlySerializedAs("_layerMask")] [SerializeField] private LayerMask _obstaclesLayerMask;
+
+
 
         private List<Lightsource> _lightSources=new List<Lightsource>();
         private float _colliderRadius;
@@ -45,9 +49,23 @@ namespace Core.Lightsystem
 
                 if(_activateOnExitLight)
                 {
-                    OnExitLight?.Invoke();
+                    OnExitLightFunction();
                 }
             }
+        }
+
+        private Coroutine _delayedExitLightCoroutine;
+
+        private void OnExitLightFunction()
+        {
+            if (_delayedExitLightCoroutine != null) StopCoroutine(_delayedExitLightCoroutine);
+            _delayedExitLightCoroutine = StartCoroutine(DelayedExitLightCoroutine());
+        }
+
+        private IEnumerator DelayedExitLightCoroutine()
+        {
+            yield return new WaitForSeconds(_onExitDelay);
+            OnExitLight?.Invoke();
         }
 
         private void Start()
