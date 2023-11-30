@@ -918,11 +918,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2242445860172417963, guid: bc5565fa065314f4ba3db7ab5ececb5e,
-        type: 3}
-      propertyPath: _onExitDelay
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3992624499855585681, guid: bc5565fa065314f4ba3db7ab5ececb5e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -977,6 +972,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Torch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466400805286740436, guid: bc5565fa065314f4ba3db7ab5ececb5e,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

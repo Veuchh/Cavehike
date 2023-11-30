@@ -54,7 +54,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.66
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2242445860172417963
 MonoBehaviour:
@@ -79,31 +79,20 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 3
+          m_FloatArgument: 4
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
   OnExitLight:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6945664460326356998}
-        m_TargetAssemblyTypeName: Core.Lightsystem.Lightsource, Lightsystem
-        m_MethodName: ProgressivelyChangeRange
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnStayLight:
     m_PersistentCalls:
       m_Calls: []
   _activateOnStayLight: 0
-  _activateOnExitLight: 1
-  _layerMask:
+  _activateOnExitLight: 0
+  _onExitDelay: 0
+  _obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 128
 --- !u!54 &8931884520759721773
@@ -204,22 +193,22 @@ PrefabInstance:
     - target: {fileID: 5802745939422770978, guid: 202a94100b7cd3647a97d87f7493f83d,
         type: 3}
       propertyPath: m_Radius
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8361455109586669125, guid: 202a94100b7cd3647a97d87f7493f83d,
         type: 3}
       propertyPath: _range
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 9169081326857589051, guid: 202a94100b7cd3647a97d87f7493f83d,
         type: 3}
       propertyPath: m_SpotAngle
-      value: 7.3000183
+      value: 9.85422
       objectReference: {fileID: 0}
     - target: {fileID: 9169081326857589051, guid: 202a94100b7cd3647a97d87f7493f83d,
         type: 3}
       propertyPath: m_InnerSpotAngle
-      value: 0
+      value: 2.554202
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
