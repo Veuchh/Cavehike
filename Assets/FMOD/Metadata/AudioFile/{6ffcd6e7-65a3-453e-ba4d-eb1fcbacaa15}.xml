@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{6ffcd6e7-65a3-453e-ba4d-eb1fcbacaa15}">
+		<property name="assetPath">
+			<value>03_DNB3_Drum_Loops_Full_174.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>5.5172562358276647</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{de68ce3d-01e2-40ae-b539-a9fbdabe43de}</destination>
+		</relationship>
+	</object>
+</objects>
